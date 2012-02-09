@@ -85,6 +85,7 @@ module Zanox
       sales.each do |salesday|
         if salesday[:items] > 0
           salesitems += salesday[:salesitems]
+        end
       end
 
     end
