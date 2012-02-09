@@ -24,7 +24,6 @@ module Zanox
       begin
         options.merge!(:connectid => @@connect_id)
 
-#         method = '/reports/basic'
         verb = options[:verb] || 'GET'
 
         timestamp = Zanox::API.get_timestamp
@@ -82,18 +81,12 @@ module Zanox
         Zanox::Report.sales(date)
       end
 
-      sales
-      # get sales for each day
-      # transform in list of salesid
-      # get each salesitem
-      # select by gpp
+      salesitems = []
+      sales.each do |salesday|
+        if salesday[:items] > 0
+          salesitems += salesday[:salesitems]
+      end
 
     end
   end
 end
-
-puts Zanox::Report.gpp(Time.now - 2 * 24 * 60 * 60, Time.now)
-
-# puts Zanox::Report.sales(Time.now - 24 * 60 * 60).parsed_response
-# z.methods
-# z.get_report
