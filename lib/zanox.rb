@@ -1,6 +1,5 @@
 require 'rubygems'
 
-
 module Zanox
   module API
     require 'httparty'
@@ -14,7 +13,7 @@ module Zanox
     @@secret_key = ENV['ZANOX_KEY']
     @@endpoint   = '/json/2011-03-01'
 
-    base_uri 'api.zanox.com'
+    base_uri 'api.zanox.com:443'
     default_params :connectid => @@connect_id,
                    :currency  => 'EUR'
 
@@ -35,7 +34,10 @@ module Zanox
                        :signature => signature,
                        :nonce => nonce)
 
-        get @@endpoint + method, :query => options
+        response = get @@endpoint + method, :query => options
+
+        puts response.parsed_response
+        Zanox::Response.new(response.parsed_response)
       rescue Exception => e
         puts "error"
         puts e.message
@@ -88,6 +90,22 @@ module Zanox
         end
       end
 
+    end
+  end
+
+  class Response
+    def initialize (hash)
+      hash.each do |key,value|
+        define_singleton_method(key.gsub(/@/,'').gsub(/\$/,'value').underscore) do
+          if value.instance_of? Hash
+            Zanox::Response.new(value)
+          elsif value.instance_of? Array
+            value.map { |x| Zanox::Response.new(x) }
+          else
+            value
+          end
+        end
+      end
     end
   end
 end
