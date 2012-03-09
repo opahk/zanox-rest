@@ -95,6 +95,7 @@ module Zanox
 
   class Response
     def initialize (hash)
+
       hash.each do |key,value|
         define_singleton_method(key.gsub(/@/,'').gsub(/\$/,'value').underscore) do
           if value.instance_of? Hash
@@ -105,6 +106,10 @@ module Zanox
             value
           end
         end
+      end
+
+      define_singleton_method("to_hash") do
+        hash
       end
     end
   end
