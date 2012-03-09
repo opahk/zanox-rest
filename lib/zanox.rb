@@ -9,9 +9,10 @@ module Zanox
 
     include HTTParty
 
-    @@connect_id = ENV['ZANOX_ID']
-    @@secret_key = ENV['ZANOX_KEY']
-    @@endpoint   = '/json/2011-03-01'
+    @@connect_id   = ENV['ZANOX_ID']
+    @@secret_key   = ENV['ZANOX_KEY']
+    @@endpoint     = '/json/2011-03-01'
+    @@debug_output = false
 
     base_uri 'api.zanox.com:443'
     default_params :connectid => @@connect_id,
@@ -36,11 +37,14 @@ module Zanox
 
         response = get @@endpoint + method, :query => options
 
-        puts response.parsed_response
+        puts response.parsed_response if @@debug_output
         Zanox::Response.new(response.parsed_response)
       rescue Exception => e
-        puts "error"
-        puts e.message
+        if @@debug_output
+          puts "error"
+          puts e.message
+        end
+        Zanox::Response.new({:error => true})
       end
     end
 
@@ -53,12 +57,16 @@ module Zanox
     end
 
     def self.create_signature(secret_key, string2sign)
-      puts string2sign
+      puts string2sign if @@debug_output
       Base64.encode64(HMAC::SHA1.new(@@secret_key).update(string2sign).digest)[0..-2]
     end
 
     def self.format_date (date)
       "%d-%0*d-%0*d" % [date.year, 2, date.month, 2, date.day]
+    end
+
+    def self.debug_output= value
+      @@debug_output = value
     end
   end
 
