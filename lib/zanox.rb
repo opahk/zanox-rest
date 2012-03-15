@@ -121,6 +121,11 @@ module Zanox
       define_singleton_method("to_hash") do
         hash
       end
+
+      define_singleton_method("method_missing") do
+        nil
+      end
+
     end
   end
 end
