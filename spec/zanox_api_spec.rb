@@ -19,4 +19,13 @@ describe "Zanox API" do
     report.sale_items.sale_item.first.amount.to_s.should == CONFIG['sales']['firstamount'].to_s
   end
 
+  it "accepts abitrarily nested method invokations on response object" do
+
+    response = Zanox::Response.new({:a => 1, :b => 2})
+    response.a.should == 1
+    response.b.should == 2
+    response.method_not_there.should be_nil
+    response.method_not_there.nested_not_there.should be_nil
+  end
+
 end
