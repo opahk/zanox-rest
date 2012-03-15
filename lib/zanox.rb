@@ -122,12 +122,10 @@ module Zanox
         hash
       end
 
-      class << self
-        def method_missing method, *params, &block
-          class << nil
-            def method_mising method, *params, &block
-              self
-            end
+      define_singleton_method("method_missing") do |method, *params|
+        class << nil
+          def method_missing method, *params, &block
+            self
           end
         end
       end
