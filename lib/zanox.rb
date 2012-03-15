@@ -124,7 +124,11 @@ module Zanox
 
       class << self
         def method_missing method, *params, &block
-          nil
+          class << nil
+            def method_mising method, *params, &block
+              self
+            end
+          end
         end
       end
 
