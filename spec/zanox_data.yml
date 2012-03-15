@@ -1,0 +1,10 @@
+basic:
+  fromdate: 2012/02/01
+  todate: 2012/03/01
+  total: 18
+sales:
+  date: 2012/02/13
+  items: 1
+  firstid: 789050fb-0d5a-4987-94fa-2d294f28fbd1
+  firstprogram: Amazon DE
+  firstamount: 15.23

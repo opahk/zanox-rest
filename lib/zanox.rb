@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'active_support'
 
 module Zanox
   module API
@@ -105,7 +106,8 @@ module Zanox
     def initialize (hash)
 
       hash.each do |key,value|
-        define_singleton_method(key.gsub(/@/,'').gsub(/\$/,'value').underscore) do
+        method_name = ActiveSupport::Inflector.underscore key.to_s.gsub(/@/,'').gsub(/\$/,'value')
+        define_singleton_method(method_name) do
           if value.instance_of? Hash
             Zanox::Response.new(value)
           elsif value.instance_of? Array
