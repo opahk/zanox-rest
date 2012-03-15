@@ -111,7 +111,13 @@ module Zanox
           if value.instance_of? Hash
             Zanox::Response.new(value)
           elsif value.instance_of? Array
-            value.map { |x| Zanox::Response.new(x) }
+            result = value.map { |x| Zanox::Response.new(x) }
+            class << result
+              def method_missing method, *params, &block
+                self
+              end
+            end
+            result
           else
             value
           end
