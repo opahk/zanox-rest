@@ -73,23 +73,23 @@ module Zanox
 
   module Report
 
-    def self.basic (from, to)
-      Zanox::API.request('/reports/basic',
-                         :fromdate  => Zanox::API.format_date(from),
+    def self.basic (from, to, options = {})
+      options.merge!(:fromdate  => Zanox::API.format_date(from),
                          :todate    => Zanox::API.format_date(to))
+      Zanox::API.request('/reports/basic', options)
     end
 
-    def self.sales (date)
-      Zanox::API.request('/reports/sales/date/' + Zanox::API.format_date(date))
+    def self.sales (date, options = {})
+      Zanox::API.request('/reports/sales/date/' + Zanox::API.format_date(date), options)
     end
 
-    def self.salesitem (saleid)
-      Zanox::API.request('/reports/sales/sale/' + saleid)
+    def self.salesitem (saleid, options = {})
+      Zanox::API.request('/reports/sales/sale/' + saleid, options)
     end
 
-    def self.gpp (from, to, gpp = {})
+    def self.gpp (from, to, options = {})
       sales = (from.to_date..to.to_date).map do |date|
-        Zanox::Report.sales(date)
+        Zanox::Report.sales(date, options)
       end
 
       salesitems = []
