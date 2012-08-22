@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'active_support'
 
-module Zanox
+module ZanoxAPI
   module API
     require 'httparty'
     require 'base64'
@@ -27,9 +27,9 @@ module Zanox
 
         verb = options[:verb] || 'GET'
 
-        timestamp = Zanox::API.get_timestamp
-        nonce     = Zanox::API.generate_nonce
-        signature = Zanox::API.create_signature @@secret_key,
+        timestamp = ZanoxAPI::API.get_timestamp
+        nonce     = ZanoxAPI::API.generate_nonce
+        signature = ZanoxAPI::API.create_signature @@secret_key,
             verb + method.downcase + timestamp + nonce
 
         options.merge!(:date => timestamp,
@@ -39,13 +39,13 @@ module Zanox
         response = get @@endpoint + method, :query => options
 
         puts response.parsed_response if @@debug_output
-        Zanox::Response.new(response.parsed_response)
+        ZanoxAPI::Response.new(response.parsed_response)
       rescue Exception => e
         if @@debug_output
           puts "error"
           puts e.message
         end
-        Zanox::Response.new({:error => true})
+        ZanoxAPI::Response.new({:error => true})
       end
     end
 
@@ -74,22 +74,22 @@ module Zanox
   module Report
 
     def self.basic (from, to, options = {})
-      options.merge!(:fromdate  => Zanox::API.format_date(from),
-                         :todate    => Zanox::API.format_date(to))
-      Zanox::API.request('/reports/basic', options)
+      options.merge!(:fromdate  => ZanoxAPI::API.format_date(from),
+                         :todate    => ZanoxAPI::API.format_date(to))
+      ZanoxAPI::API.request('/reports/basic', options)
     end
 
     def self.sales (date, options = {})
-      Zanox::API.request('/reports/sales/date/' + Zanox::API.format_date(date), options)
+      ZanoxAPI::API.request('/reports/sales/date/' + ZanoxAPI::API.format_date(date), options)
     end
 
     def self.salesitem (saleid, options = {})
-      Zanox::API.request('/reports/sales/sale/' + saleid, options)
+      ZanoxAPI::API.request('/reports/sales/sale/' + saleid, options)
     end
 
     def self.gpp (from, to, options = {})
       sales = (from.to_date..to.to_date).map do |date|
-        Zanox::Report.sales(date, options)
+        ZanoxAPI::Report.sales(date, options)
       end
 
       salesitems = []
@@ -109,9 +109,9 @@ module Zanox
         method_name = ActiveSupport::Inflector.underscore key.to_s.gsub(/@/,'').gsub(/\$/,'value')
         define_singleton_method(method_name) do
           if value.instance_of? Hash
-            Zanox::Response.new(value)
+            ZanoxAPI::Response.new(value)
           elsif value.instance_of? Array
-            result = value.map { |x| Zanox::Response.new(x) }
+            result = value.map { |x| ZanoxAPI::Response.new(x) }
             class << result
               def method_missing method, *params, &block
                 self
