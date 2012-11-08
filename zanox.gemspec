@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'zanox'
-  s.version     = '0.1.1'
-  s.date        = '2012-02-09'
+  s.version     = '0.1.2'
+  s.date        = '2012-11-08'
   s.summary     = "This is a simple ruby wrapper around the Zanox REST API for reports"
   s.description = ""
   s.authors     = ["Frank Eckert"]
