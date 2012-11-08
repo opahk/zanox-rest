@@ -87,6 +87,14 @@ module ZanoxAPI
       ZanoxAPI::API.request('/reports/sales/sale/' + saleid, options)
     end
 
+    def self.leads (date, options = {})
+      ZanoxAPI::API.request('/reports/leads/date/' + ZanoxAPI::API.format_date(date), options)
+    end
+
+    def self.leadsitem (lead_id, options = {})
+      ZanoxAPI::API.request('/reports/leads/lead/' + lead_id, options)
+    end
+
     def self.gpp (from, to, options = {})
       sales = (from.to_date..to.to_date).map do |date|
         ZanoxAPI::Report.sales(date, options)
