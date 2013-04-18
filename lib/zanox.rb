@@ -15,7 +15,7 @@ module ZanoxAPI
     @@endpoint     = '/json/2011-03-01'
     @@debug_output = false
 
-    base_uri 'api.zanox.com:443'
+    base_uri 'api.zanox.com'
     default_params :connectid => @@connect_id,
                    :currency  => 'EUR'
 
