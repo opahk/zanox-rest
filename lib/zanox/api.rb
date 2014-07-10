@@ -15,6 +15,7 @@ class API
     @connect_id = connect_id
     @secret_key = secret_key
     @debug_output = debug_output
+    self.class.base_uri BASE_URI
   end
 
   def request(method, options = {})
@@ -28,7 +29,7 @@ class API
       options.merge! connectid: @connect_id, date: timestamp,
         signature: signature, nonce: nonce
 
-      response = get ENDPOINT + method, query: options
+      response = self.class.get ENDPOINT + method, query: options
 
       puts response.parsed_response if @debug_output
       ZanoxAPI::Response.new response.parsed_response
