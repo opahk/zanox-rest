@@ -41,11 +41,7 @@ module ZanoxAPI
         puts response.parsed_response if @@debug_output
         ZanoxAPI::Response.new(response.parsed_response)
       rescue Exception => e
-        if @@debug_output
-          puts "error"
-          puts e.message
-        end
-        ZanoxAPI::Response.new({:error => true})
+        ZanoxAPI::Response.new({:error => true, :message => e.message})
       end
     end
 
